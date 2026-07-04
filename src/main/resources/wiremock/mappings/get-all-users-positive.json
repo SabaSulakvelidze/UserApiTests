@@ -1,0 +1,17 @@
+{
+  "priority": 2,
+  "request": {
+    "method": "GET",
+    "urlPath": "/users"
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "jsonBody": [
+      { "id": 1, "name": "Alice", "age": 30, "gender": "female" },
+      { "id": 2, "name": "Bob", "age": 25, "gender": "male" }
+    ]
+  }
+}
