@@ -1,4 +1,5 @@
 import com.credobank.Data.UserDataProvider;
+import com.credobank.Utils.Deserializer;
 import com.credobank.Utils.SqlLiteTestResultListener;
 import com.credobank.models.response.ErrorResponse;
 import com.credobank.models.response.UsersResponse;
@@ -6,6 +7,7 @@ import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
 import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
+import org.eclipse.jetty.server.Authentication;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -55,11 +57,13 @@ public class UserApiTest {
                 .response();
 
         if (expectedStatus == 200) {
-            List<UsersResponse> users = response.as(new TypeRef<List<UsersResponse>>() {
-            });
+            List<UsersResponse> users = Deserializer.deserializeList(response, UsersResponse.class);
+            //ალტერნატივა, RestAssured ავტომატურად აკეთებს დესერიალიზაციას Jackson ბიბლიოთეკის გამოყენებით
+            //List<UsersResponse> users = response.as(new TypeRef<List<UsersResponse>>() {});
             Assert.assertEquals(users.size(), expectedSize);
-        }else {
-            ErrorResponse errorResponse = response.as(ErrorResponse.class);
+        } else {
+            ErrorResponse errorResponse = Deserializer.deserialize(response, ErrorResponse.class);
+            //ErrorResponse errorResponse = response.as(ErrorResponse.class);
             Assert.assertNotNull(errorResponse.getMessage());
         }
 
