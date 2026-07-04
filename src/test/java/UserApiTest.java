@@ -1,4 +1,5 @@
 import com.credobank.Data.UserDataProvider;
+import com.credobank.Utils.SqlLiteTestResultListener;
 import com.credobank.models.response.ErrorResponse;
 import com.credobank.models.response.UsersResponse;
 import io.restassured.RestAssured;
@@ -8,13 +9,14 @@ import io.restassured.response.Response;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.DataProvider;
+import org.testng.annotations.Listeners;
 import org.testng.annotations.Test;
 
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
 
+@Listeners(SqlLiteTestResultListener.class)
 public class UserApiTest {
 
     @BeforeClass
