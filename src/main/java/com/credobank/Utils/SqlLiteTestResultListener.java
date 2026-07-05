@@ -21,10 +21,6 @@ public class SqlLiteTestResultListener implements ITestListener {
         if (params != null && params.length > 0 && params[0] instanceof String) {
             return String.valueOf(params[0]);
         }
-        // fallback if this method ever runs without a DataProvider
         return result.getMethod().getMethodName();
-
-        /*return params != null && params[0] instanceof String ?
-                String.valueOf(params[0]) : result.getMethod().getMethodName();*/
     }
 }
