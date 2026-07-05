@@ -1,13 +1,11 @@
 import com.credobank.Data.UserDataProvider;
 import com.credobank.Utils.Deserializer;
 import com.credobank.Utils.SqlLiteTestResultListener;
+import com.credobank.Utils.WireMockSetup;
 import com.credobank.models.response.ErrorResponse;
 import com.credobank.models.response.UsersResponse;
-import io.restassured.RestAssured;
 import io.restassured.builder.RequestSpecBuilder;
-import io.restassured.common.mapper.TypeRef;
 import io.restassured.response.Response;
-import org.eclipse.jetty.server.Authentication;
 import org.testng.Assert;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
@@ -17,15 +15,14 @@ import org.testng.annotations.Test;
 import java.util.List;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.module.jsv.JsonSchemaValidator.matchesJsonSchemaInClasspath;
 
 @Listeners(SqlLiteTestResultListener.class)
-public class UserApiTest {
+public class UserApiTest extends BaseApiTest{
 
     @BeforeClass
     public void setUp() {
         WireMockSetup.startServer();
-        RestAssured.baseURI = "http://localhost";
-        RestAssured.port = 2424;
     }
 
     @AfterClass
@@ -38,6 +35,7 @@ public class UserApiTest {
             String testName,
             String qParamKey,
             String qParamValue,
+            String expectedSchemasPath,
             int expectedStatus,
             int expectedSize
     ) {
@@ -53,6 +51,7 @@ public class UserApiTest {
                 .get("/users")
                 .then()
                 .statusCode(expectedStatus)
+                .body(matchesJsonSchemaInClasspath(expectedSchemasPath))
                 .extract()
                 .response();
 
